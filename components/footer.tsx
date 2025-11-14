@@ -12,7 +12,7 @@ export default function Footer() {
             </h3>
             <p className="text-foreground/60 text-sm">Transforming businesses through AI and strategic innovation.</p>
           </div>
-
+          
           {/* Links */}
           {[
             {

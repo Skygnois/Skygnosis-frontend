@@ -1162,19 +1162,19 @@ function Footer() {
     }, this);
 }
 }),
-"[project]/components/ParticleGrid.tsx [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"[project]/components/TechGrid.tsx [app-ssr] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
 __turbopack_context__.s([
     "default",
-    ()=>ParticleGrid
+    ()=>TechGrid
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
 'use client';
 ;
 ;
-function ParticleGrid() {
+function TechGrid() {
     const canvasRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRef"])(null);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
         const canvas = canvasRef.current;
@@ -1184,214 +1184,287 @@ function ParticleGrid() {
             desynchronized: true
         });
         if (!ctx) return;
-        ctx.imageSmoothingEnabled = true;
-        ctx.imageSmoothingQuality = 'high';
         const resizeCanvas = ()=>{
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-            canvas.style.width = `${window.innerWidth}px`;
-            canvas.style.height = `${window.innerHeight}px`;
         };
         resizeCanvas();
         window.addEventListener('resize', resizeCanvas);
-        const stars = [];
-        const starCount = 100;
-        for(let i = 0; i < starCount; i++){
-            const random = Math.random();
-            let size;
-            let type;
-            let brightness;
-            let depth;
-            if (random < 0.60) {
-                // Far background stars (slowest)
-                size = Math.random() * 0.7 + 0.3;
-                type = 'small';
-                brightness = Math.random() * 0.3 + 0.3;
-                depth = Math.random() * 0.3 + 0.05; // 0.05-0.35
-            } else if (random < 0.85) {
-                // Mid-field stars
-                size = Math.random() * 1.2 + 0.8;
-                type = 'medium';
-                brightness = Math.random() * 0.3 + 0.5;
-                depth = Math.random() * 0.3 + 0.35; // 0.35-0.65
-            } else if (random < 0.95) {
-                // Foreground stars
-                size = Math.random() * 1.8 + 1.2;
-                type = 'large';
-                brightness = Math.random() * 0.2 + 0.6;
-                depth = Math.random() * 0.2 + 0.65; // 0.65-0.85
-            } else {
-                // Hero stars (closest, fastest)
-                size = Math.random() * 2.2 + 1.8;
-                type = 'bright';
-                brightness = Math.random() * 0.15 + 0.75;
-                depth = Math.random() * 0.15 + 0.85; // 0.85-1.0
-            }
-            const colorVariation = Math.random();
-            let color;
-            if (colorVariation < 0.65) {
-                color = {
-                    r: 96,
-                    g: 165,
-                    b: 250
-                };
-            } else if (colorVariation < 0.85) {
-                color = {
-                    r: 180,
-                    g: 200,
-                    b: 255
-                };
-            } else {
-                color = {
-                    r: 255,
-                    g: 255,
-                    b: 255
-                };
-            }
-            stars.push({
-                x: Math.random() * window.innerWidth,
-                y: Math.random() * window.innerHeight,
-                baseY: Math.random() * window.innerHeight,
-                size,
-                brightness,
-                twinkleSpeed: Math.random() * 0.015 + 0.008,
-                twinklePhase: Math.random() * Math.PI * 2,
+        const nodes = [];
+        const energyParticles = [];
+        const nodeCount = 60;
+        const activationRadius = 200;
+        const connectionDistance = 180;
+        // Create nodes with depth for parallax
+        for(let i = 0; i < nodeCount; i++){
+            const depth = Math.random() * 0.7 + 0.3;
+            nodes.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                baseY: Math.random() * canvas.height,
+                vx: (Math.random() - 0.5) * 0.3,
+                vy: (Math.random() - 0.5) * 0.3,
                 depth,
-                type,
-                color
+                active: false,
+                activationLevel: 0
             });
         }
+        let mouseX = -1000;
+        let mouseY = -1000;
         let scrollY = 0;
         let targetScrollY = 0;
         let time = 0;
-        let animationFrame;
+        const handleMouseMove = (e)=>{
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        };
         const handleScroll = ()=>{
             targetScrollY = window.scrollY;
         };
+        window.addEventListener('mousemove', handleMouseMove, {
+            passive: true
+        });
         window.addEventListener('scroll', handleScroll, {
             passive: true
         });
-        const drawStar = (star, twinkle, currentY)=>{
-            const { x, size, brightness, color, type } = star;
-            const alpha = brightness * twinkle;
+        const createEnergyParticle = (from, to)=>{
+            energyParticles.push({
+                x: from.x,
+                y: from.y,
+                targetX: to.x,
+                targetY: to.y,
+                progress: 0,
+                speed: 0.02 + Math.random() * 0.02,
+                fromNode: from,
+                toNode: to
+            });
+        };
+        const drawNode = (node, currentY)=>{
+            const baseSize = 3 * node.depth;
+            const size = baseSize + node.activationLevel * 4;
             // Outer glow
-            const outerGradient = ctx.createRadialGradient(x, currentY, 0, x, currentY, size * 5);
-            outerGradient.addColorStop(0, `rgba(${color.r}, ${color.g}, ${color.b}, ${alpha * 0.5})`);
-            outerGradient.addColorStop(0.4, `rgba(${color.r}, ${color.g}, ${color.b}, ${alpha * 0.25})`);
-            outerGradient.addColorStop(1, `rgba(${color.r}, ${color.g}, ${color.b}, 0)`);
+            const outerGradient = ctx.createRadialGradient(node.x, currentY, 0, node.x, currentY, size * 4);
+            outerGradient.addColorStop(0, `rgba(96, 165, 250, ${node.activationLevel * 0.6})`);
+            outerGradient.addColorStop(0.5, `rgba(96, 165, 250, ${node.activationLevel * 0.3})`);
+            outerGradient.addColorStop(1, 'rgba(96, 165, 250, 0)');
             ctx.fillStyle = outerGradient;
             ctx.beginPath();
-            ctx.arc(x, currentY, size * 5, 0, Math.PI * 2);
+            ctx.arc(node.x, currentY, size * 4, 0, Math.PI * 2);
             ctx.fill();
-            // Inner glow
-            const innerGradient = ctx.createRadialGradient(x, currentY, 0, x, currentY, size * 2);
-            innerGradient.addColorStop(0, `rgba(${color.r}, ${color.g}, ${color.b}, ${alpha})`);
-            innerGradient.addColorStop(0.6, `rgba(${color.r}, ${color.g}, ${color.b}, ${alpha * 0.6})`);
-            innerGradient.addColorStop(1, `rgba(${color.r}, ${color.g}, ${color.b}, 0)`);
-            ctx.fillStyle = innerGradient;
+            // Core
+            ctx.fillStyle = node.active ? `rgba(96, 165, 250, ${0.6 + node.activationLevel * 0.4})` : `rgba(96, 165, 250, ${0.2 * node.depth})`;
             ctx.beginPath();
-            ctx.arc(x, currentY, size * 2, 0, Math.PI * 2);
+            ctx.arc(node.x, currentY, size, 0, Math.PI * 2);
             ctx.fill();
-            // Sharp core
-            ctx.fillStyle = `rgba(255, 255, 255, ${alpha * 0.95})`;
-            ctx.beginPath();
-            ctx.arc(x, currentY, size * 0.4, 0, Math.PI * 2);
-            ctx.fill();
-            // Star flare for bright stars
-            if (type === 'bright' && twinkle > 0.75) {
-                const flareAlpha = (twinkle - 0.75) * 4 * alpha * 0.5;
-                ctx.strokeStyle = `rgba(${color.r}, ${color.g}, ${color.b}, ${flareAlpha})`;
-                ctx.lineWidth = 0.8;
-                // Vertical
+            // Bright center
+            if (node.active) {
+                ctx.fillStyle = `rgba(255, 255, 255, ${node.activationLevel * 0.8})`;
                 ctx.beginPath();
-                ctx.moveTo(x, currentY - size * 4);
-                ctx.lineTo(x, currentY + size * 4);
-                ctx.stroke();
-                // Horizontal
-                ctx.beginPath();
-                ctx.moveTo(x - size * 4, currentY);
-                ctx.lineTo(x + size * 4, currentY);
-                ctx.stroke();
-                // Diagonal 1
-                ctx.strokeStyle = `rgba(${color.r}, ${color.g}, ${color.b}, ${flareAlpha * 0.6})`;
-                ctx.lineWidth = 0.5;
-                ctx.beginPath();
-                ctx.moveTo(x - size * 3, currentY - size * 3);
-                ctx.lineTo(x + size * 3, currentY + size * 3);
-                ctx.stroke();
-                // Diagonal 2
-                ctx.beginPath();
-                ctx.moveTo(x + size * 3, currentY - size * 3);
-                ctx.lineTo(x - size * 3, currentY + size * 3);
-                ctx.stroke();
+                ctx.arc(node.x, currentY, size * 0.5, 0, Math.PI * 2);
+                ctx.fill();
             }
         };
+        const drawConnection = (from, to, fromY, toY, distance)=>{
+            const opacity = Math.max(from.activationLevel, to.activationLevel);
+            if (opacity < 0.1) return;
+            const gradient = ctx.createLinearGradient(from.x, fromY, to.x, toY);
+            gradient.addColorStop(0, `rgba(96, 165, 250, ${opacity * 0.4})`);
+            gradient.addColorStop(0.5, `rgba(59, 130, 246, ${opacity * 0.6})`);
+            gradient.addColorStop(1, `rgba(96, 165, 250, ${opacity * 0.4})`);
+            ctx.strokeStyle = gradient;
+            ctx.lineWidth = 1 + opacity * 1.5;
+            ctx.shadowColor = 'rgba(96, 165, 250, 0.8)';
+            ctx.shadowBlur = opacity * 10;
+            ctx.beginPath();
+            ctx.moveTo(from.x, fromY);
+            ctx.lineTo(to.x, toY);
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+        };
+        const drawEnergyParticle = (particle)=>{
+            // Update position along the line
+            particle.progress += particle.speed;
+            if (particle.progress >= 1) {
+                const index = energyParticles.indexOf(particle);
+                energyParticles.splice(index, 1);
+                return;
+            }
+            const x = particle.fromNode.x + (particle.toNode.x - particle.fromNode.x) * particle.progress;
+            const fromY = particle.fromNode.y;
+            const toY = particle.toNode.y;
+            const y = fromY + (toY - fromY) * particle.progress;
+            // Glowing particle
+            const gradient = ctx.createRadialGradient(x, y, 0, x, y, 8);
+            gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
+            gradient.addColorStop(0.3, 'rgba(96, 165, 250, 0.9)');
+            gradient.addColorStop(0.6, 'rgba(59, 130, 246, 0.6)');
+            gradient.addColorStop(1, 'rgba(59, 130, 246, 0)');
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.arc(x, y, 8, 0, Math.PI * 2);
+            ctx.fill();
+            // Particle trail
+            ctx.strokeStyle = `rgba(96, 165, 250, ${0.6 * (1 - particle.progress)})`;
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(particle.fromNode.x, fromY);
+            ctx.lineTo(x, y);
+            ctx.stroke();
+        };
         const animate = ()=>{
-            time += 0.012;
-            // Smooth scroll interpolation (easing)
+            time += 0.01;
             scrollY += (targetScrollY - scrollY) * 0.08;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            // Sort stars by depth (back to front)
-            const sortedStars = [
-                ...stars
-            ].sort((a, b)=>a.depth - b.depth);
-            sortedStars.forEach((star)=>{
-                // Ultra-slow parallax: multiply by depth (0.05 to 1.0)
-                // Background stars barely move, foreground stars move more
-                const parallaxOffset = scrollY * star.depth * 0.08 // Very slow multiplier
-                ;
-                // Calculate Y position with wrapping
-                let currentY = star.baseY + parallaxOffset;
-                // Wrap around viewport
-                if (currentY > canvas.height + 100) {
-                    currentY = currentY % (canvas.height + 200) - 100;
-                } else if (currentY < -100) {
-                    currentY = canvas.height + 100 + currentY % (canvas.height + 200);
+            // Update nodes
+            nodes.forEach((node)=>{
+                // Parallax with scroll
+                const parallaxOffset = scrollY * node.depth * 0.08;
+                node.y = node.baseY + parallaxOffset;
+                // Wrap around
+                if (node.y > canvas.height + 50) {
+                    node.y = -50;
+                    node.baseY = node.y - parallaxOffset;
+                } else if (node.y < -50) {
+                    node.y = canvas.height + 50;
+                    node.baseY = node.y - parallaxOffset;
                 }
-                // Smooth twinkling
-                const twinkle = (Math.sin(time * star.twinkleSpeed + star.twinklePhase) + 1) / 2 * 0.4 + 0.6;
-                drawStar(star, twinkle, currentY);
+                // Gentle drift
+                node.x += node.vx * node.depth;
+                node.baseY += node.vy * node.depth;
+                // Bounce off edges
+                if (node.x < 0 || node.x > canvas.width) node.vx *= -1;
+                if (node.baseY < 0 || node.baseY > canvas.height) node.vy *= -1;
+                // Check cursor proximity
+                const dx = mouseX - node.x;
+                const dy = mouseY - node.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                if (distance < activationRadius) {
+                    node.active = true;
+                    node.activationLevel += (1 - node.activationLevel) * 0.1;
+                } else {
+                    node.activationLevel *= 0.95;
+                    if (node.activationLevel < 0.05) {
+                        node.active = false;
+                        node.activationLevel = 0;
+                    }
+                }
             });
-            // Draw subtle connections between nearby bright stars
-            const brightStars = sortedStars.filter((s)=>s.type === 'bright' || s.type === 'large');
-            for(let i = 0; i < brightStars.length; i++){
-                const star = brightStars[i];
-                const starY = star.baseY + scrollY * star.depth * 0.08;
-                for(let j = i + 1; j < brightStars.length; j++){
-                    const otherStar = brightStars[j];
-                    const otherY = otherStar.baseY + scrollY * otherStar.depth * 0.08;
-                    const dx = star.x - otherStar.x;
-                    const dy = starY - otherY;
+            // Draw connections and create energy particles
+            for(let i = 0; i < nodes.length; i++){
+                const nodeA = nodes[i];
+                for(let j = i + 1; j < nodes.length; j++){
+                    const nodeB = nodes[j];
+                    const dx = nodeA.x - nodeB.x;
+                    const dy = nodeA.y - nodeB.y;
                     const distance = Math.sqrt(dx * dx + dy * dy);
-                    if (distance < 180) {
-                        const opacity = (1 - distance / 180) * 0.12;
-                        ctx.strokeStyle = `rgba(96, 165, 250, ${opacity})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.beginPath();
-                        ctx.moveTo(star.x, starY);
-                        ctx.lineTo(otherStar.x, otherY);
-                        ctx.stroke();
+                    if (distance < connectionDistance) {
+                        drawConnection(nodeA, nodeB, nodeA.y, nodeB.y, distance);
+                        // Create energy particles when both nodes are active
+                        if (nodeA.active && nodeB.active && Math.random() < 0.03) {
+                            createEnergyParticle(nodeA, nodeB);
+                        }
                     }
                 }
             }
-            animationFrame = requestAnimationFrame(animate);
+            // Draw energy particles
+            energyParticles.forEach((particle)=>drawEnergyParticle(particle));
+            // Draw nodes on top
+            nodes.forEach((node)=>drawNode(node, node.y));
+            requestAnimationFrame(animate);
         };
         animate();
         return ()=>{
+            window.removeEventListener('mousemove', handleMouseMove);
             window.removeEventListener('scroll', handleScroll);
             window.removeEventListener('resize', resizeCanvas);
-            cancelAnimationFrame(animationFrame);
         };
     }, []);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("canvas", {
         ref: canvasRef,
         className: "fixed inset-0 pointer-events-none z-0",
         style: {
-            opacity: 0.9
+            opacity: 0.85
         }
     }, void 0, false, {
-        fileName: "[project]/components/ParticleGrid.tsx",
-        lineNumber: 251,
+        fileName: "[project]/components/TechGrid.tsx",
+        lineNumber: 279,
+        columnNumber: 5
+    }, this);
+}
+}),
+"[project]/components/HolographicGrid.tsx [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "default",
+    ()=>HolographicGrid
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/framer-motion/dist/es/render/components/motion/proxy.mjs [app-ssr] (ecmascript)");
+'use client';
+;
+;
+function HolographicGrid() {
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: "fixed inset-0 pointer-events-none z-0 overflow-hidden",
+        children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
+                className: "absolute inset-0",
+                style: {
+                    backgroundImage: `
+            linear-gradient(rgba(96, 165, 250, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(96, 165, 250, 0.03) 1px, transparent 1px)
+          `,
+                    backgroundSize: '60px 60px'
+                },
+                animate: {
+                    backgroundPosition: [
+                        '0px 0px',
+                        '60px 60px'
+                    ]
+                },
+                transition: {
+                    duration: 20,
+                    repeat: Infinity,
+                    ease: 'linear'
+                }
+            }, void 0, false, {
+                fileName: "[project]/components/HolographicGrid.tsx",
+                lineNumber: 9,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "absolute top-4 left-4 w-16 h-16 border-t-2 border-l-2 border-blue-500/30"
+            }, void 0, false, {
+                fileName: "[project]/components/HolographicGrid.tsx",
+                lineNumber: 29,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "absolute top-4 right-4 w-16 h-16 border-t-2 border-r-2 border-blue-500/30"
+            }, void 0, false, {
+                fileName: "[project]/components/HolographicGrid.tsx",
+                lineNumber: 30,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "absolute bottom-4 left-4 w-16 h-16 border-b-2 border-l-2 border-blue-500/30"
+            }, void 0, false, {
+                fileName: "[project]/components/HolographicGrid.tsx",
+                lineNumber: 31,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "absolute bottom-4 right-4 w-16 h-16 border-b-2 border-r-2 border-blue-500/30"
+            }, void 0, false, {
+                fileName: "[project]/components/HolographicGrid.tsx",
+                lineNumber: 32,
+                columnNumber: 7
+            }, this)
+        ]
+    }, void 0, true, {
+        fileName: "[project]/components/HolographicGrid.tsx",
+        lineNumber: 7,
         columnNumber: 5
     }, this);
 }
@@ -1447,6 +1520,87 @@ function ScrollProgress() {
     }, void 0, true);
 }
 }),
+"[project]/components/ScrollRevealText.tsx [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "default",
+    ()=>ScrollRevealText
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$value$2f$use$2d$scroll$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/framer-motion/dist/es/value/use-scroll.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$value$2f$use$2d$transform$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/framer-motion/dist/es/value/use-transform.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/framer-motion/dist/es/render/components/motion/proxy.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+'use client';
+;
+;
+;
+function ScrollRevealText({ text, className = '' }) {
+    const ref = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRef"])(null);
+    const { scrollYProgress } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$value$2f$use$2d$scroll$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useScroll"])({
+        target: ref,
+        offset: [
+            'start 0.9',
+            'start 0.25'
+        ]
+    });
+    const words = text.split(' ');
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        ref: ref,
+        className: `py-20 ${className}`,
+        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+            className: "text-3xl md:text-5xl lg:text-6xl font-light leading-tight text-center max-w-5xl mx-auto",
+            children: words.map((word, i)=>{
+                const start = i / words.length;
+                const end = start + 1 / words.length;
+                return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Word, {
+                    progress: scrollYProgress,
+                    range: [
+                        start,
+                        end
+                    ],
+                    children: word
+                }, i, false, {
+                    fileName: "[project]/components/ScrollRevealText.tsx",
+                    lineNumber: 27,
+                    columnNumber: 13
+                }, this);
+            })
+        }, void 0, false, {
+            fileName: "[project]/components/ScrollRevealText.tsx",
+            lineNumber: 22,
+            columnNumber: 7
+        }, this)
+    }, void 0, false, {
+        fileName: "[project]/components/ScrollRevealText.tsx",
+        lineNumber: 21,
+        columnNumber: 5
+    }, this);
+}
+function Word({ children, progress, range }) {
+    const opacity = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$value$2f$use$2d$transform$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useTransform"])(progress, range, [
+        0.2,
+        1
+    ]);
+    const color = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$value$2f$use$2d$transform$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useTransform"])(progress, range, [
+        'rgba(156, 163, 175, 0.4)',
+        'rgba(248, 250, 252, 1)'
+    ]);
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].span, {
+        style: {
+            opacity,
+            color
+        },
+        className: "inline-block mr-2 md:mr-3",
+        children: children
+    }, void 0, false, {
+        fileName: "[project]/components/ScrollRevealText.tsx",
+        lineNumber: 54,
+        columnNumber: 5
+    }, this);
+}
+}),
 "[project]/app/page.tsx [app-ssr] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
@@ -1455,7 +1609,6 @@ __turbopack_context__.s([
     ()=>Page
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$hero$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/hero.tsx [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$navigation$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/navigation.tsx [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$services$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/services.tsx [app-ssr] (ecmascript)");
@@ -1463,8 +1616,10 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$trusted$2d$by$
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$value$2d$prop$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/value-prop.tsx [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$cta$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/cta.tsx [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$footer$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/footer.tsx [app-ssr] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ParticleGrid$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/ParticleGrid.tsx [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$TechGrid$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/TechGrid.tsx [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$HolographicGrid$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/HolographicGrid.tsx [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ScrollProgress$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/ScrollProgress.tsx [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ScrollRevealText$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/ScrollRevealText.tsx [app-ssr] (ecmascript)");
 "use client";
 ;
 ;
@@ -1477,87 +1632,83 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ScrollProgress
 ;
 ;
 ;
+;
 function Page() {
-    const [mousePosition, setMousePosition] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])({
-        x: 0,
-        y: 0
-    });
-    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
-        const handleMouseMove = (e)=>{
-            setMousePosition({
-                x: e.clientX,
-                y: e.clientY
-            });
-        };
-        window.addEventListener("mousemove", handleMouseMove);
-        return ()=>window.removeEventListener("mousemove", handleMouseMove);
-    }, []);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("main", {
         className: "bg-background text-foreground relative overflow-hidden",
         children: [
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ParticleGrid$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$TechGrid$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                 fileName: "[project]/app/page.tsx",
-                lineNumber: 30,
+                lineNumber: 19,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$HolographicGrid$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
+                fileName: "[project]/app/page.tsx",
+                lineNumber: 20,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ScrollProgress$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                 fileName: "[project]/app/page.tsx",
-                lineNumber: 31,
+                lineNumber: 21,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$navigation$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                 fileName: "[project]/app/page.tsx",
-                lineNumber: 33,
+                lineNumber: 24,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$hero$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                 fileName: "[project]/app/page.tsx",
-                lineNumber: 34,
+                lineNumber: 25,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
+                className: "relative z-10 bg-transparent px-6",
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ScrollRevealText$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
+                    text: "Advanced AI solutions that automate workflows optimize operations and deliver measurable business impact through intelligent technology"
+                }, void 0, false, {
+                    fileName: "[project]/app/page.tsx",
+                    lineNumber: 29,
+                    columnNumber: 9
+                }, this)
+            }, void 0, false, {
+                fileName: "[project]/app/page.tsx",
+                lineNumber: 28,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$trusted$2d$by$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                 fileName: "[project]/app/page.tsx",
-                lineNumber: 37,
+                lineNumber: 34,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$services$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                 fileName: "[project]/app/page.tsx",
-                lineNumber: 38,
+                lineNumber: 35,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$value$2d$prop$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                 fileName: "[project]/app/page.tsx",
-                lineNumber: 39,
+                lineNumber: 36,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$cta$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                 fileName: "[project]/app/page.tsx",
-                lineNumber: 40,
+                lineNumber: 37,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$footer$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                 fileName: "[project]/app/page.tsx",
-                lineNumber: 41,
-                columnNumber: 7
-            }, this),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "fixed inset-0 pointer-events-none opacity-20 z-0",
-                style: {
-                    background: `radial-gradient(circle 600px at ${mousePosition.x}px ${mousePosition.y}px, rgba(96, 165, 250, 0.3), transparent 80%)`
-                }
-            }, void 0, false, {
-                fileName: "[project]/app/page.tsx",
-                lineNumber: 44,
+                lineNumber: 38,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/page.tsx",
-        lineNumber: 28,
+        lineNumber: 17,
         columnNumber: 5
     }, this);
 }
 }),
 ];
 
-//# sourceMappingURL=_9b904243._.js.map
+//# sourceMappingURL=_a1d606b2._.js.map

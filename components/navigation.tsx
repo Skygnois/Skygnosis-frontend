@@ -46,9 +46,27 @@ export default function Navigation() {
           </div>
 
           {/* CTA Button - Using custom button class */}
-          <button className="hidden md:block btn-primary">
-            Get Started
+          <button className="hidden md:block group relative px-6 py-2.5 bg-gradient-to-r from-blue-600 to-blue-500 text-white text-sm font-medium rounded-lg overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/50 hover:-translate-y-0.5">
+            {/* Animated gradient background */}
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-gradient-flow"
+              style={{ backgroundSize: '200% 100%' }} />
+
+            {/* Shimmer effect */}
+            <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+
+            {/* Subtle glow */}
+            <div className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+              style={{ boxShadow: 'inset 0 0 10px rgba(255, 255, 255, 0.2)' }} />
+
+            {/* Button text */}
+            <span className="relative z-10 flex items-center gap-2">
+              Get Started
+              <svg className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+              </svg>
+            </span>
           </button>
+
 
           {/* Mobile Menu Button */}
           <button
