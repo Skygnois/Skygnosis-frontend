@@ -88,26 +88,25 @@ function TechGrid() {
             }["TechGrid.useEffect.createEnergyParticle"];
             const drawNode = {
                 "TechGrid.useEffect.drawNode": (node, currentY)=>{
-                    const baseSize = 2.5 * node.depth // Smaller base size
-                    ;
+                    const baseSize = 2.5 * node.depth;
                     const size = baseSize + node.activationLevel * 3;
-                    // Lighter outer glow
-                    const outerGradient = ctx.createRadialGradient(node.x, currentY, 0, node.x, currentY, size * 3.5);
-                    outerGradient.addColorStop(0, `rgba(96, 165, 250, ${node.activationLevel * 0.4})`);
-                    outerGradient.addColorStop(0.5, `rgba(96, 165, 250, ${node.activationLevel * 0.2})`);
-                    outerGradient.addColorStop(1, 'rgba(96, 165, 250, 0)');
+                    // Lighter outer glow with blur effect
+                    const outerGradient = ctx.createRadialGradient(node.x, currentY, 0, node.x, currentY, size * 4.5);
+                    outerGradient.addColorStop(0, `rgba(150, 195, 255, ${node.activationLevel * 0.2})`);
+                    outerGradient.addColorStop(0.5, `rgba(150, 195, 255, ${node.activationLevel * 0.1})`);
+                    outerGradient.addColorStop(1, 'rgba(150, 195, 255, 0)');
                     ctx.fillStyle = outerGradient;
                     ctx.beginPath();
-                    ctx.arc(node.x, currentY, size * 3.5, 0, Math.PI * 2);
+                    ctx.arc(node.x, currentY, size * 4.5, 0, Math.PI * 2);
                     ctx.fill();
-                    // Core
-                    ctx.fillStyle = node.active ? `rgba(96, 165, 250, ${0.5 + node.activationLevel * 0.3})` : `rgba(96, 165, 250, ${0.15 * node.depth})`;
+                    // Lighter core
+                    ctx.fillStyle = node.active ? `rgba(150, 195, 255, ${0.4 + node.activationLevel * 0.25})` : `rgba(150, 195, 255, ${0.12 * node.depth})`;
                     ctx.beginPath();
                     ctx.arc(node.x, currentY, size, 0, Math.PI * 2);
                     ctx.fill();
-                    // Bright center
+                    // Softer bright center
                     if (node.active) {
-                        ctx.fillStyle = `rgba(255, 255, 255, ${node.activationLevel * 0.6})`;
+                        ctx.fillStyle = `rgba(255, 255, 255, ${node.activationLevel * 0.45})`;
                         ctx.beginPath();
                         ctx.arc(node.x, currentY, size * 0.4, 0, Math.PI * 2);
                         ctx.fill();
@@ -119,13 +118,13 @@ function TechGrid() {
                     const opacity = Math.max(from.activationLevel, to.activationLevel);
                     if (opacity < 0.1) return;
                     const gradient = ctx.createLinearGradient(from.x, fromY, to.x, toY);
-                    gradient.addColorStop(0, `rgba(96, 165, 250, ${opacity * 0.3})`);
-                    gradient.addColorStop(0.5, `rgba(59, 130, 246, ${opacity * 0.4})`);
-                    gradient.addColorStop(1, `rgba(96, 165, 250, ${opacity * 0.3})`);
+                    gradient.addColorStop(0, `rgba(150, 195, 255, ${opacity * 0.2})`);
+                    gradient.addColorStop(0.5, `rgba(100, 160, 240, ${opacity * 0.25})`);
+                    gradient.addColorStop(1, `rgba(150, 195, 255, ${opacity * 0.2})`);
                     ctx.strokeStyle = gradient;
-                    ctx.lineWidth = 1 + opacity * 1;
-                    ctx.shadowColor = 'rgba(96, 165, 250, 0.6)';
-                    ctx.shadowBlur = opacity * 6;
+                    ctx.lineWidth = 1 + opacity * 0.8;
+                    ctx.shadowColor = 'rgba(150, 195, 255, 0.35)';
+                    ctx.shadowBlur = opacity * 4;
                     ctx.beginPath();
                     ctx.moveTo(from.x, fromY);
                     ctx.lineTo(to.x, toY);
@@ -135,7 +134,6 @@ function TechGrid() {
             }["TechGrid.useEffect.drawConnection"];
             const drawEnergyParticle = {
                 "TechGrid.useEffect.drawEnergyParticle": (particle)=>{
-                    // Update position along the line
                     particle.progress += particle.speed;
                     if (particle.progress >= 1) {
                         const index = energyParticles.indexOf(particle);
@@ -146,19 +144,19 @@ function TechGrid() {
                     const fromY = particle.fromNode.y;
                     const toY = particle.toNode.y;
                     const y = fromY + (toY - fromY) * particle.progress;
-                    // Lighter glowing particle
-                    const gradient = ctx.createRadialGradient(x, y, 0, x, y, 6);
-                    gradient.addColorStop(0, 'rgba(255, 255, 255, 0.8)');
-                    gradient.addColorStop(0.3, 'rgba(96, 165, 250, 0.7)');
-                    gradient.addColorStop(0.6, 'rgba(59, 130, 246, 0.4)');
-                    gradient.addColorStop(1, 'rgba(59, 130, 246, 0)');
+                    // Lighter glowing particle with blur
+                    const gradient = ctx.createRadialGradient(x, y, 0, x, y, 7);
+                    gradient.addColorStop(0, 'rgba(255, 255, 255, 0.6)');
+                    gradient.addColorStop(0.3, 'rgba(150, 195, 255, 0.5)');
+                    gradient.addColorStop(0.6, 'rgba(100, 160, 240, 0.25)');
+                    gradient.addColorStop(1, 'rgba(100, 160, 240, 0)');
                     ctx.fillStyle = gradient;
                     ctx.beginPath();
-                    ctx.arc(x, y, 6, 0, Math.PI * 2);
+                    ctx.arc(x, y, 7, 0, Math.PI * 2);
                     ctx.fill();
                     // Lighter particle trail
-                    ctx.strokeStyle = `rgba(96, 165, 250, ${0.4 * (1 - particle.progress)})`;
-                    ctx.lineWidth = 1.5;
+                    ctx.strokeStyle = `rgba(150, 195, 255, ${0.25 * (1 - particle.progress)})`;
+                    ctx.lineWidth = 1.2;
                     ctx.beginPath();
                     ctx.moveTo(particle.fromNode.x, fromY);
                     ctx.lineTo(x, y);
@@ -172,10 +170,8 @@ function TechGrid() {
                     // Update nodes
                     nodes.forEach({
                         "TechGrid.useEffect.animate": (node)=>{
-                            // Parallax with scroll
                             const parallaxOffset = scrollY * node.depth * 0.08;
                             node.y = node.baseY + parallaxOffset;
-                            // Wrap around
                             if (node.y > canvas.height + 50) {
                                 node.y = -50;
                                 node.baseY = node.y - parallaxOffset;
@@ -183,21 +179,18 @@ function TechGrid() {
                                 node.y = canvas.height + 50;
                                 node.baseY = node.y - parallaxOffset;
                             }
-                            // Gentle drift
                             node.x += node.vx * node.depth;
                             node.baseY += node.vy * node.depth;
-                            // Bounce off edges
                             if (node.x < 0 || node.x > canvas.width) node.vx *= -1;
                             if (node.baseY < 0 || node.baseY > canvas.height) node.vy *= -1;
-                            // Check cursor proximity
                             const dx = mouseX - node.x;
                             const dy = mouseY - node.y;
                             const distance = Math.sqrt(dx * dx + dy * dy);
                             if (distance < activationRadius) {
                                 node.active = true;
-                                node.activationLevel += (1 - node.activationLevel) * 0.15; // Faster activation
+                                node.activationLevel += (1 - node.activationLevel) * 0.15;
                             } else {
-                                node.activationLevel *= 0.85; // Faster fade (was 0.95)
+                                node.activationLevel *= 0.85;
                                 if (node.activationLevel < 0.05) {
                                     node.active = false;
                                     node.activationLevel = 0;
@@ -215,18 +208,15 @@ function TechGrid() {
                             const distance = Math.sqrt(dx * dx + dy * dy);
                             if (distance < connectionDistance) {
                                 drawConnection(nodeA, nodeB, nodeA.y, nodeB.y);
-                                // Create energy particles when both nodes are active
                                 if (nodeA.active && nodeB.active && Math.random() < 0.02) {
                                     createEnergyParticle(nodeA, nodeB);
                                 }
                             }
                         }
                     }
-                    // Draw energy particles
                     energyParticles.forEach({
                         "TechGrid.useEffect.animate": (particle)=>drawEnergyParticle(particle)
                     }["TechGrid.useEffect.animate"]);
-                    // Draw nodes on top
                     nodes.forEach({
                         "TechGrid.useEffect.animate": (node)=>drawNode(node, node.y)
                     }["TechGrid.useEffect.animate"]);
@@ -247,11 +237,12 @@ function TechGrid() {
         ref: canvasRef,
         className: "fixed inset-0 pointer-events-none z-0",
         style: {
-            opacity: 0.75
+            opacity: 0.65,
+            filter: 'blur(0.5px)' // Subtle blur for softer effect
         }
     }, void 0, false, {
         fileName: "[project]/components/TechGrid.tsx",
-        lineNumber: 277,
+        lineNumber: 267,
         columnNumber: 5
     }, this);
 }

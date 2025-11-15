@@ -1,90 +1,63 @@
 "use client"
 
-import { useEffect, useRef } from "react"
-
-export default function ValueProp() {
-  const ref = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("animate-fade-in-up")
-        }
-      },
-      { threshold: 0.1 },
-    )
-
-    if (ref.current) observer.observe(ref.current)
-    return () => observer.disconnect()
-  }, [])
-
+export default function WhyChooseUsGlass() {
   return (
     <section
-      id="case-studies"
-      ref={ref}
-      className="py-20 md:py-32 px-4 sm:px-6 lg:px-8 relative overflow-hidden opacity-0"
+      className="relative w-full min-h-screen flex items-center justify-center px-6 sm:px-10 py-20 overflow-hidden"
+      aria-label="Why Choose SKYGNOSIS"
     >
-      {/* Background gradient */}
-      <div className="absolute inset-0">
-        <div className="absolute top-1/2 left-0 w-96 h-96 bg-secondary/10 rounded-full blur-3xl -translate-y-1/2 -translate-x-1/2" />
-        <div className="absolute top-1/2 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-      </div>
+      {/* Background Video */}
+      <video
+        src="\45961-447087612_small.mp4"
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover brightness-[0.6] saturate-[1.10] z-0"
+      />
 
-      <div className="max-w-6xl mx-auto relative z-10">
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          {/* Left: Image placeholder */}
-          <div className="relative h-96 md:h-full rounded-xl glass overflow-hidden group">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-secondary/20 to-accent/20" />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-center">
-                <div className="text-6xl font-bold text-primary/30 mb-4">AI</div>
-                <p className="text-foreground/40">Strategic Partnership</p>
-              </div>
+      {/* Blue-black-white gradient overlays */}
+      <div className="absolute top-0 left-0 w-full h-56 bg-gradient-to-b from-black via-[#072457] to-white/0 z-10 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-full h-56 bg-gradient-to-t from-black via-[#072457] to-white/0 z-10 pointer-events-none" />
+
+      {/* Grey glassmorphic content block */}
+      <div className="
+        relative z-20 w-full max-w-5xl mx-auto
+        flex flex-col items-center justify-center
+        backdrop-blur-[23px]
+        bg-gray-800/70
+        px-16 py-8
+        border border-gray-300/30
+        shadow-[0_8px_64px_0_rgba(50,100,150,0.13)]
+        rounded-2xl
+      ">
+        <h2 className="mb-6 text-4xl sm:text-5xl font-extrabold text-center text-white"
+          style={{
+            textShadow: "0 0 24px #2583f7, 0 2px 16px #1d4ed8",
+          }}
+        >
+          Why Choose SKYGNOSIS?
+        </h2>
+        <p className="mb-7 text-lg text-blue-100 text-center leading-normal font-medium max-w-3xl">
+          Empower your business with intelligent automation, proven AI strategies, and seamless support. Focus on growth while our custom agents deliver results—risk management, marketing optimization, and digital transformation.
+        </p>
+        <div className="grid md:grid-cols-2 gap-x-10 gap-y-3 w-full max-w-3xl mx-auto mb-5">
+          {[
+            "AI agents automate, optimize, and secure your processes.",
+            "Experts: 15+ years' experience, 500+ projects delivered.",
+            "Ready-to-scale tech for finance, SEO, manufacturing & more.",
+            "24/7 support for smooth, reliable operation.",
+          ].map((point, i) => (
+            <div key={i} className="flex items-center gap-3 text-blue-100 text-base leading-normal">
+              <span className="inline-block w-3 h-3 rounded-full bg-gradient-to-br from-cyan-400 to-blue-500 shadow-md" />
+              {point}
             </div>
-          </div>
-
-          {/* Right: Content */}
-          <div className="space-y-8">
-            <div>
-              <h2 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">Why Choose SKYGNOSIS?</h2>
-              <p className="text-lg text-foreground/70">
-                We don't just implement technology. We partner with you to understand your unique challenges and create
-                sustainable, transformative solutions.
-              </p>
-            </div>
-
-            {/* Features */}
-            <div className="space-y-6">
-              {[
-                {
-                  title: "Expert Team",
-                  desc: "PhD-level researchers and industry veterans with 15+ years of experience",
-                },
-                {
-                  title: "Proven Methodology",
-                  desc: "Battle-tested frameworks that have driven 500+ successful transformations",
-                },
-                {
-                  title: "24/7 Support",
-                  desc: "Dedicated support team ensuring your systems run smoothly around the clock",
-                },
-              ].map((feature, i) => (
-                <div key={i} className="flex gap-4">
-                  <div className="w-1 bg-gradient-to-b from-primary to-secondary rounded-full" />
-                  <div>
-                    <h3 className="font-bold text-lg mb-1">{feature.title}</h3>
-                    <p className="text-foreground/60">{feature.desc}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <button className="mt-8 px-8 py-3 rounded-full bg-gradient-to-r from-primary to-secondary text-white font-semibold hover:shadow-lg hover:shadow-primary/50 transition-all duration-300">
-              Learn More
-            </button>
-          </div>
+          ))}
         </div>
+        <button className="mt-7 px-12 py-3 rounded-full bg-gradient-to-r from-cyan-300 via-blue-500 to-blue-800 text-white font-bold text-lg shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-cyan-300/50 relative">
+          <span className="relative z-10">Learn More</span>
+          <span className="absolute left-1/2 bottom-0 -translate-x-1/2 w-[70%] h-2 rounded-full bg-cyan-300/25 blur-[10px] pointer-events-none"></span>
+        </button>
       </div>
     </section>
   )
