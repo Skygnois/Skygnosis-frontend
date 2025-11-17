@@ -21,70 +21,59 @@ export default function CTA() {
   return (
     <section id="contact" ref={ref} className="py-10 md:py-18 px-2 sm:px-6 lg:px-8 opacity-0">
       <div className="max-w-6xl mx-auto">
-        {/* Glowing glass block */}
+        {/* Minimal glass container with subtle elevation */}
         <div
           className="relative z-20 w-full max-w-6xl mx-auto
-            backdrop-blur-[23px] bg-gray-800/70
-            px-24 py-4
-            border border-gray-300/30 rounded-2xl text-center
-            shadow-[0_0_30px_7px_rgba(0,178,255,0.38)]
-            hover:shadow-[0_0_42px_18px_rgba(0,178,255,0.54)]
-            transition-shadow duration-500"
+            backdrop-blur-md bg-gray-900/40
+            px-8 md:px-16 py-12 md:py-16
+            border border-white/10 rounded-3xl text-center
+            shadow-[0_8px_32px_rgba(0,0,0,0.12)]
+            hover:shadow-[0_16px_48px_rgba(0,178,255,0.15)]
+            hover:-translate-y-2
+            transition-all duration-500 ease-out"
         >
-          {/* Gradient line accent */}
-          <div className="w-24 h-1 bg-gradient-to-r from-primary via-secondary to-accent mx-auto mb-6 rounded-full" />
+          {/* Refined gradient accent */}
+          <div className="w-16 h-0.5 bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-500 mx-auto mb-8 rounded-full opacity-80" />
 
-          <h2
-            className="text-3xl md:text-5xl font-extrabold mb-4 leading-tight text-white"
-            style={{
-              textShadow: "0 0 13px #2583f7, 0 1px 8px #1d4ed8",
-            }}
-          >
-            Let's Elevate Your Business!!!
+          <h2 className="text-3xl md:text-5xl font-bold mb-6 leading-tight hero-heading">
+            Let's Elevate Your Business
           </h2>
 
-          <p className="text-lg text-foreground/70 mb-7 max-w-2xl mx-auto">
-            Join hundreds of industry leaders who are already leveraging AI to stay ahead of the competition. Let's
-            discuss how we can help you achieve your goals.
+
+          <p className="text-base md:text-lg text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed">
+            Join hundreds of industry leaders who are already leveraging AI to stay ahead of the competition.
+            Let's discuss how we can help you achieve your goals.
           </p>
 
-          {/* Bigger Schedule Demo Button */}
+          {/* Deep black button with glowing text */}
           <button
-            className="relative mx-auto px-18 py-6 rounded-3xl overflow-hidden group cursor-pointer
-              border-2 border-cyan-400/80 shadow-[0_0_38px_rgba(0,200,255,0.45)]
-              hover:shadow-[0_0_55px_rgba(0,200,255,0.65)]
-              transition duration-500 hover:scale-110 active:scale-105
-              max-w-lg w-full"
+            className="relative mx-auto px-12 py-5 rounded-2xl overflow-hidden group cursor-pointer
+              bg-black border border-cyan-400/40
+              shadow-[0_0_20px_rgba(6,182,212,0.25)]
+              hover:shadow-[0_0_35px_rgba(6,182,212,0.45)]
+              hover:border-cyan-400/60
+              transition-all duration-500 hover:scale-105 active:scale-100
+              max-w-md w-full"
           >
-            {/* Video background */}
-            <video
-              src="\45961-447087612_small.mp4"
-              autoPlay
-              muted
-              loop
-              playsInline
-              className="absolute inset-0 w-full h-full object-cover brightness-75 saturate-110"
-            />
-
-            {/* Dark overlay for text contrast */}
-            <div className="absolute inset-0 bg-gradient-to-br from-black/40 via-blue-900/45 to-cyan-900/40 group-hover:from-black/28 group-hover:via-blue-800/35 group-hover:to-cyan-800/25 transition duration-500 pointer-events-none"></div>
-
             {/* Shimmer effect on hover */}
-            <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none"></div>
+            <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-cyan-400/10 to-transparent pointer-events-none"></div>
 
-            {/* Button Text, improved and less glow */}
+            {/* Glowing button text */}
             <span
-              className="relative z-10 text-cyan-300 font-extrabold text-2xl md:text-3xl tracking-wide
-                drop-shadow-[1px_1px_0_rgba(0,128,255,0.5)]
-                drop-shadow-[1px_1px_1px_rgba(0,64,128,0.34)] select-none"
+              className="relative z-10 font-bold text-xl md:text-2xl tracking-wide select-none
+    bg-gradient-to-r from-blue-400 via-blue-500 to-blue-700 bg-clip-text text-transparent"
+              style={{
+                textShadow: "0 0 20px rgba(59, 130, 246, 0.6), 0 0 40px rgba(37, 99, 235, 0.4)",
+                filter: "drop-shadow(0 0 8px rgba(59, 130, 246, 0.5))"
+              }}
             >
               Schedule Demo
             </span>
           </button>
 
-          {/* Email */}
-          <p className="mt-8 text-foreground/50 text-base">
-            Or reach out: <span className="text-primary font-semibold">info@skygnosis.com</span>
+          {/* Contact email */}
+          <p className="mt-10 text-gray-400 text-sm md:text-base">
+            Or reach out: <span className="text-royal-blue font-medium">info@skygnosis.com</span>
           </p>
         </div>
       </div>

@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///D:/10K/Sygnosis-site/code/app/about/page.tsx"],"sourcesContent":["\"use client\";\r\n\r\nimport Navigation from \"@/components/navigation\"; // Adjust the import path if needed\r\n\r\n"],"names":[],"mappings":";AAAA;;CAEkD,mCAAmC","debugId":null}}]
+}

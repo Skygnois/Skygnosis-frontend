@@ -7,10 +7,10 @@ export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
 
   const navItems = [
-    { label: "Services", href: "#services" },
-    { label: "About", href: "#about" },
-    { label: "Case Studies", href: "#case-studies" },
-    { label: "Contact", href: "#contact" },
+    { label: "Services", href: "/services" },
+    { label: "About", href: "/about" },
+    { label: "Blog", href: "/blog" },
+    { label: "Contact", href: "/contact" },
   ]
 
   return (
@@ -20,17 +20,24 @@ export default function Navigation() {
           {/* Logo - Glowing white text */}
           <Link
             href="/"
-            className="text-xl font-bold text-royal-blue tracking-wider uppercase hover:scale-110 transition-all duration-300"
-            style={{ transition: 'all 0.3s ease' }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.textShadow = '0 0 25px rgba(82, 109, 255, 1.0), 0 0 50px rgba(82, 109, 255, 0.8), 0 0 75px rgba(82, 109, 255, 0.6), 0 0 100px rgba(82, 109, 255, 0.4)'
+            className="skygnosis-heading cursor-pointer select-none hover:scale-110 transition-transform duration-300 flex items-center justify-center"
+            style={{
+              transition: 'all 0.3s ease',
+              marginBottom: 0, // ensures no unwanted vertical shift if global css has margin-bottom
             }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.textShadow = 'none'
+            onMouseEnter={e => {
+              e.currentTarget.style.textShadow =
+                '0 0 25px rgba(82, 109, 255, 1.0), 0 0 50px rgba(82, 109, 255, 0.8), 0 0 75px rgba(82, 109, 255, 0.6), 0 0 100px rgba(82, 109, 255, 0.4)';
+            }}
+            onMouseLeave={e => {
+              // Set textShadow back to your global CSS's default
+              e.currentTarget.style.textShadow =
+                '0 2px 18px rgba(96, 165, 250, 0.28), 0 0px 2px rgba(0, 0, 0, 0.14)';
             }}
           >
-            Skygnosis
+            SKYGNOSIS
           </Link>
+
 
           {/* Desktop Navigation Links */}
           <div className="hidden md:flex gap-8">

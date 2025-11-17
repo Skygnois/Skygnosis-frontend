@@ -7,12 +7,22 @@ export default function Footer() {
         <div className="grid md:grid-cols-4 gap-8 md:gap-12 mb-12">
           {/* Brand */}
           <div>
-            <h3 className="text-xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent mb-4">
+            <h3
+              className="text-xl md:text-2xl font-bold tracking-[0.18em] uppercase select-none mb-4 text-center
+      bg-gradient-to-r from-blue-400 via-blue-500 to-blue-700 bg-clip-text text-transparent"
+              style={{
+                fontFamily: "'Inter', 'Geist', 'Montserrat', 'Segoe UI', Arial, sans-serif",
+                textShadow: "0 0 20px rgba(59, 130, 246, 0.54), 0 0 40px rgba(37, 99, 235, 0.38)",
+                filter: "drop-shadow(0 0 8px rgba(59, 130, 246, 0.38))"
+              }}
+            >
               SKYGNOSIS
             </h3>
-            <p className="text-foreground/60 text-sm">Transforming businesses through AI and strategic innovation.</p>
+            <p className="text-slate-300 text-sm text-center">
+              Transforming businesses through AI and strategic innovation.
+            </p>
           </div>
-          
+
           {/* Links */}
           {[
             {
